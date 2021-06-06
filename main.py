@@ -1,33 +1,27 @@
 import uvicorn
+from fastapi import FastAPI
 
-import config.db
-from app import app
-from routers.channel import router as channel_router
-from routers.processing_type import router as pt_router
-from routers.rs_device import router as rsd_router
-from routers.alias import router as alias_router
-from routers.raster import router as raster_router
+from config.db import database
+from routers.routers import alias_router, pt_router, rsd_router, channels_router, rasters_router
+
+app = FastAPI()
+
+app.include_router(alias_router)
+app.include_router(pt_router)
+app.include_router(rsd_router)
+app.include_router(channels_router)
+app.include_router(rasters_router)
 
 
 @app.on_event("startup")
-async def startup() -> None:
-    database_ = config.db.database
-    if not database_.is_connected:
-        await database_.connect()
+async def startup():
+    await database.connect()
 
 
 @app.on_event("shutdown")
-async def shutdown() -> None:
-    database_ = config.db.database
-    if database_.is_connected:
-        await database_.disconnect()
+async def shutdown():
+    await database.disconnect()
 
-
-app.include_router(channel_router)
-app.include_router(pt_router)
-app.include_router(rsd_router)
-app.include_router(alias_router)
-app.include_router(raster_router)
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

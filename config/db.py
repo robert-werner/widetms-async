@@ -1,8 +1,12 @@
 import databases
 import sqlalchemy
 
-from config.environment import DB_USER, DB_PWD, DB_HOST, DB_NAME, DB_PORT
+from config.environment import db_user, db_password, db_host, db_port, db
 
-DB_URL = f"postgresql://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-database = databases.Database(DB_URL)
-metadata = sqlalchemy.MetaData()
+DATABASE_URL = f"postgres://{db_user}:{db_password}@{db_host}:{db_port}/{db}"
+
+database = databases.Database(DATABASE_URL)
+engine = sqlalchemy.create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
