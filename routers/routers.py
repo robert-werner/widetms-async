@@ -1,11 +1,12 @@
-from typing import Optional
-
 from fastapi_crudrouter import DatabasesCRUDRouter
 
-from config import db
 from config.db import database
+from models.aliases import t_aliases
+from models.channels import t_channels
+from models.processing_types import t_processing_types
 from models.pydantic.models import Aliases, ProcessingTypes, RsDevices, Channels, Rasters
-from models_nc import t_aliases, t_processing_types, t_rs_devices, t_channels, t_rasters
+from models.rasters import t_rasters
+from models.rs_devices import t_rs_devices
 
 alias_router = DatabasesCRUDRouter(
     schema=Aliases,
@@ -30,13 +31,6 @@ channels_router = DatabasesCRUDRouter(
     table=t_channels,
     database=database
 )
-
-
-@channels_router.get('')
-async def overloaded_get_all():
-    query = t_channels.join(t_rs_devices, left)
-    return await database.fetch_all(query)
-
 
 rasters_router = DatabasesCRUDRouter(
     schema=Rasters,
