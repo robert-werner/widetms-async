@@ -7,6 +7,7 @@ from routers.processing_type import router as pt_router
 from routers.rs_device import router as rsd_router
 from routers.alias import router as alias_router
 from routers.raster import router as raster_router
+from routers.tms import router as tms_router
 
 
 @app.on_event("startup")
@@ -28,6 +29,7 @@ app.include_router(pt_router)
 app.include_router(rsd_router)
 app.include_router(alias_router)
 app.include_router(raster_router)
+app.include_router(tms_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

@@ -1,30 +1,40 @@
+import re
+import uuid
 from typing import List, Optional
 
-from fastapi import APIRouter
+from dateutil import parser
+from fastapi import APIRouter, HTTPException
+from fastapi_crudrouter import OrmarCRUDRouter
 
+from models.alias import Alias
+from models.channel import Channel
+from models.pydantic.update.raster import CreateRaster
 from models.raster import Raster
+from models.processing_type import ProcessingType
 
-router = APIRouter()
+router = OrmarCRUDRouter(
+    schema=Raster,
+    create_schema=Optional[CreateRaster]
+)
 
 
-@router.get("/raster", response_model=List[Raster])
-async def get_rasters(alias: Optional[str] = None,
-                      sensing_time: Optional[str] = None,
-                      rs_device: Optional[str] = None,
-                      spatial_res: Optional[int] = None,
-                      unit: Optional[str] = None,
-                      channel: Optional[str] = None,
-                      processing_type: Optional[str] = None,
-                      filepath: Optional[str] = None):
-    query_args = {key: val for key, val in locals().items() if val is not None}
-    fk_keys = dict(
-        rs_device='info__rs_device_id__rs_device',
-        spatial_res='info__spatial_res',
-        unit='info__unit',
-        channel='info__channel',
-        processing_type='processing_type__processing_type'
-    )
-    fk_keys_in_qargs = query_args.keys() & fk_keys.keys()
-    for _ in fk_keys_in_qargs:
-        query_args[fk_keys[_]] = query_args.pop(_)
-    return await Raster.objects.select_all().all(**query_args)
+@router.post('/l1c')
+async def createl1c(filepath: str):
+    try:
+        result = []
+        alias = re.findall(r'_(T\d+\w+)_', filepath)[0]
+        db_alias = await Alias.objects.get_or_create(alias=alias, description=f"A Sentinel-2 '{alias}' MGRS tile")
+        date_pieces = []
+        for i in range(0, 6):
+            date_pieces.append(
+                re.findall(r"[CA]_(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})", filepath)[0][i])
+        date = parser.parse('{}-{}-{} {}:{}:{}'.format(*date_pieces))
+        db_l1c = await ProcessingType.objects.get(processing_type='L1C')
+        for channel in ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12']:
+            db_channel = await Channel.objects.get(channel=channel, rs_device_id__rs_device='Sentinel-2')
+            db_raster = await Raster.objects.create(id=uuid.uuid4(), alias=db_alias, channel_id=db_channel, sensing_time=date,
+                                                    processing_type=db_l1c, filepath=filepath.format(channel))
+            result.append(db_raster)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

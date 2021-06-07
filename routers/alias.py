@@ -1,13 +1,11 @@
-from typing import List, Optional
+from typing import Optional
 
-from fastapi import APIRouter
+from fastapi_crudrouter import OrmarCRUDRouter
 
 from models.alias import Alias
+from models.pydantic.update.alias import CreateAlias
 
-router = APIRouter()
-
-
-@router.get("/alias", response_model=List[Alias])
-async def get_aliases(alias: Optional[str] = None):
-    query_args = {key: val for key, val in locals().items() if val is not None}
-    return await Alias.objects.all(**query_args)
+router = OrmarCRUDRouter(
+    schema=Alias,
+    create_schema=Optional[CreateAlias]
+)
