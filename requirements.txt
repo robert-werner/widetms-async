@@ -1,0 +1,9 @@
+fastapi
+fastapi-crudrouter
+ormar
+celery
+celerybeat-mongo
+python-dateutil
+aiocache
+uvicorn
+asyncpg
