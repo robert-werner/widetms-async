@@ -5,6 +5,7 @@ from models.alias import Alias
 from models.channel import Channel
 from models.processing_type import ProcessingType
 from models.raster import Raster
+from config.celery_app import app
 
 
 @cached(serializer=JsonSerializer())

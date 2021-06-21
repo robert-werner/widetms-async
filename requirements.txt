@@ -1,8 +1,8 @@
 fastapi
 fastapi-crudrouter
 ormar
-celery
-celerybeat-mongo
+celery[redis]
+aioredis
 python-dateutil
 aiocache
 uvicorn
