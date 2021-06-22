@@ -7,3 +7,5 @@ python-dateutil
 aiocache
 uvicorn
 asyncpg
+numpy
+aiofiles

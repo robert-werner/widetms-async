@@ -1,3 +1,8 @@
+import tempfile
+from io import BytesIO
+
+from starlette.responses import FileResponse
+
 from config.celery_app import app as celery_app
 from fastapi import APIRouter, Query, HTTPException
 from fastapi.responses import StreamingResponse
@@ -14,11 +19,10 @@ async def tms(alias: str, z: int, x: int, y: int, res: int, channels: str = Quer
         bands = []
         tasks = await form_tasks(alias, channels, z, x, y, res)
         for task in tasks:
-            bands.append(celery_app.send_task('widetms.worker.tile', (task,)))
+            band = celery_app.send_task('widetms.worker.tile', (task,))
+            bands.append(band)
         tile = celery_app.send_task('widetms.builder.build', (bands, ))
-        tile = tile.get()
-        return StreamingResponse(open(tile, mode='rb'), media_type='image/tiff', headers={
-            
-        })
+        open(f"{y}.tiff", 'wb').write(tile.get())
+        return FileResponse(f"{y}.tiff", filename=f"{y}.tiff")
     except Exception as e:
         raise HTTPException(status_code=400, detail={'type': str(e.__class__), 'text': str(e), 'execution_time': f"{time.time() - start_time} seconds"})

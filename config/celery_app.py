@@ -1,12 +1,13 @@
 from celery import Celery
 from config.environment import CELERY_RESULT_URL, CELERY_BROKER_URL
 
-app = Celery('widetms.producer', broker=CELERY_BROKER_URL, backend=r"redis://172.17.0.1:6379")
+app = Celery('widetms.producer', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_URL)
 
 app.conf.update(
     task_serializer='pickle',
     result_serializer='pickle',
-    accept_content=['pickle']
+    accept_content=['pickle'],
+    result_expires='10'
 )
 
 app.conf.task_routes = {'widetms.worker.tile': {'queue': 'tiler'},
