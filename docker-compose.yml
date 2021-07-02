@@ -1,6 +1,6 @@
 version: '3'
 services:
-  widetms-frontend:
+  widefrontend:
     env_file:
       - .env
     build:

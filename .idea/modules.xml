@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/WideTMS-Async.iml" filepath="$PROJECT_DIR$/.idea/WideTMS-Async.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../widetms-frontend/.idea/WideTMS-Frontend.iml" filepath="$PROJECT_DIR$/../widetms-frontend/.idea/WideTMS-Frontend.iml" />
     </modules>
   </component>
 </project>

@@ -1,7 +1,8 @@
 fastapi
 fastapi-crudrouter
 ormar
-celery[redis]
+celery[s3]
+pylibmc
 aioredis
 python-dateutil
 aiocache
@@ -9,3 +10,5 @@ uvicorn
 asyncpg
 numpy
 aiofiles
+pyamqp
+ujson
