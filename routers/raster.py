@@ -17,6 +17,22 @@ router = OrmarCRUDRouter(
     create_schema=Optional[CreateRaster]
 )
 
+@router.post('/something')
+async def createsome(alias: str, filepath: str, date: str, processing_type: str, channel_name: str,
+                     unit: str, spatial_res: str, rs_device: str):
+    try:
+        result = []
+        db_pc = await ProcessingType.objects.get(processing_type=processing_type)
+        db_alias = await Alias.objects.get(alias=alias)
+        db_channel = await Channel.objects.get(channel=channel_name, rs_device_id__rs_device=rs_device,
+                                               unit=unit, spatial_res=spatial_res)
+        db_raster = await Raster.objects.create(id=uuid.uuid4(), alias_id=db_alias, channel_id=db_channel, sensing_time=date,
+                                                    processing_type_id=db_pc, filepath=filepath)
+        result.append(db_raster)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.post('/l1c')
 async def createl1c(filepath: str):
