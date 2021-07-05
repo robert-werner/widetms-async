@@ -5,7 +5,9 @@ celery[redis]
 aioredis
 python-dateutil
 aiocache
+gunicorn
 uvicorn
+hypercorn
 asyncpg
 numpy
 aiofiles
