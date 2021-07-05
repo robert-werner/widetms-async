@@ -18,7 +18,6 @@ async def tms(alias: str, z: int, x: int, y: int, res: int, channels: str = Quer
     start_time = time.time()
     try:
         bands = []
-        print(resampling, dtype)
         tasks = await form_tasks(alias, channels, z, x, y, res, resampling, dtype)
         for task in tasks:
             band = celery_app.send_task('widetms.worker.tile', (task,))
