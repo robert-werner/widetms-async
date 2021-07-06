@@ -1,3 +1,4 @@
+eventlet
 fastapi
 fastapi-crudrouter
 ormar

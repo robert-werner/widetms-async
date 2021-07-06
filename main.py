@@ -1,4 +1,5 @@
 import uvicorn
+
 import config.db
 from app import app
 from config.environment import FRONTEND_PORT
@@ -33,4 +34,4 @@ app.include_router(tms_router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=int(FRONTEND_PORT), workers=5)
+    uvicorn.run("main:app", host="0.0.0.0", port=int(FRONTEND_PORT), reload=True)
