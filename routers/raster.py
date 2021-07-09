@@ -66,7 +66,7 @@ async def createl1c(filepath: str):
                 re.findall(r"[CA]_(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})", filepath)[0][i])
         date = parser.parse('{}-{}-{} {}:{}:{}'.format(*date_pieces))
         db_l1c = await ProcessingType.objects.get(processing_type='L1C')
-        for channel in ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12']:
+        for channel in ['B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10', 'B11', 'B12', 'B8A']:
             db_channel = await Channel.objects.get(channel=channel, rs_device_id__rs_device='Sentinel-2')
             db_raster = await Raster.objects.create(id=uuid.uuid4(), alias_id=db_alias.id, channel_id=db_channel.id,
                                                     sensing_time=date,
