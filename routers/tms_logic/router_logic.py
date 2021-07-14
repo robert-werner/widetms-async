@@ -122,7 +122,6 @@ async def parametrize_bands(alias, channels):
         band_param['rs_device'].append(channel[0])
     return band_param
 
-
 @cached(serializer=JsonSerializer())
 async def form_tasks(alias, channels, z, x, y, res, resampling='average', dtype='float32'):
     channels = await parse_channels(channels, resampling, dtype)

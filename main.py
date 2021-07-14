@@ -1,13 +1,10 @@
-import uvicorn
-
 import config.db
 from app import app
-from config.environment import FRONTEND_PORT
+from routers.alias import router as alias_router
 from routers.channel import router as channel_router
 from routers.processing_type import router as pt_router
-from routers.rs_device import router as rsd_router
-from routers.alias import router as alias_router
 from routers.raster import router as raster_router
+from routers.rs_device import router as rsd_router
 from routers.tms import router as tms_router
 
 
@@ -31,7 +28,3 @@ app.include_router(rsd_router)
 app.include_router(alias_router)
 app.include_router(raster_router)
 app.include_router(tms_router)
-
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=int(FRONTEND_PORT), reload=True)

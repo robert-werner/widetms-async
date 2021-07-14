@@ -1,11 +1,4 @@
 task_serializer = 'pickle'
 result_serializer = 'pickle'
 accept_content = ['pickle']
-result_compression = 'lzma'
-task_compression = 'lzma'
-s3_access_key_id = 'minioadmin'
-s3_secret_access_key = 'minioadmin'
-s3_bucket = 'widetms-backend'
-s3_base_path = '/results'
-s3_endpoint_url = 'http://192.168.181.253:9100'
-result_expires='60'
+result_expires = '30'

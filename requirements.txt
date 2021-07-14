@@ -1,5 +1,3 @@
-eventlet
-fastapi
 fastapi-crudrouter
 ormar
 celery[redis]
@@ -8,9 +6,8 @@ python-dateutil
 aiocache
 gunicorn
 uvicorn
-hypercorn
 asyncpg
 numpy
 aiofiles
 pyamqp
-ujson
+rasterio

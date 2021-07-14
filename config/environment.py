@@ -1,10 +1,9 @@
 import os
 
-DB_NAME = 'rasterdb_test'
-DB_USER = 'raster'
-DB_PWD = '7BWC9C63HXFeS79B'
-DB_HOST = '178.170.193.192'
-DB_PORT = '5432'
-CELERY_BROKER_URL = 'amqp://guest:guest@192.168.181.253:5672'
-CELERY_RESULT_URL = 'redis://192.168.181.253:6379'
-FRONTEND_PORT = '8000'
+DB_NAME = os.environ['DB_NAME']
+DB_USER = os.environ['DB_USER']
+DB_PWD = os.environ['DB_PWD']
+DB_HOST = os.environ['DB_HOST']
+DB_PORT = os.environ['DB_PORT']
+CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
+CELERY_RESULT_URL = os.environ['CELERY_RESULT_URL']
